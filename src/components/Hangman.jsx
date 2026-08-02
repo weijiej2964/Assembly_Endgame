@@ -7,7 +7,7 @@ import lives from "../assets/langList";
 import HealthDisplay from "./HealthDisplay";
 import alphabet from "../assets/alphabet";
 
-export default function Hangman() {
+export default function Hangman(props) {
   //----------------------Health--------------------------
   const [health, setHealth] = useState(lives);
 
@@ -57,8 +57,9 @@ export default function Hangman() {
       setHealth((prevHealth) => {
         let nextHealth = prevHealth;
         for (let i = 0; i < nextHealth.length; ++i) {
+          props.wrongGuess(nextHealth[i].name);
           if (i === nextHealth.length - 1) {
-            console.log(lost);
+            nextHealth[i].isDead = true;
             break;
           }
           if (nextHealth[i].isDead === false) {
@@ -71,7 +72,6 @@ export default function Hangman() {
     }
   }
 
-  console.log(word);
   console.log(health);
 
   return (

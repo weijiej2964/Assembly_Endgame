@@ -7,11 +7,23 @@ import Hangman from "./components/Hangman";
 import "./App.css";
 
 export default function App() {
+  const [message, setMessage] = useState("");
+
+  function wrongGuess(target) {
+    const killMessagesList = [
+      `Oh no, not ${target}`,
+      `${target}, its been real`,
+    ];
+    setMessage(
+      killMessagesList[Math.floor(Math.random() * killMessagesList.length)],
+    );
+  }
+
   return (
     <main>
       <Hero />
-      <Message />
-      <Hangman />
+      <Message message={message} />
+      <Hangman wrongGuess={wrongGuess} />
       <button className="new-game-btn">New Game</button>
     </main>
   );
