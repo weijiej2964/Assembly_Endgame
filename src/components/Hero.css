@@ -1,0 +1,13 @@
+.hero {
+  text-align: center;
+  margin: 20px;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}
+
+.hero > h2 {
+  color: white;
+}
+
+.hero > p {
+  color: #6f6f6f;
+}
