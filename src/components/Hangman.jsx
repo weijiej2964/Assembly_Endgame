@@ -3,7 +3,17 @@ import { useState, useEffect } from "react";
 import Word from "./Word";
 import Keyboard from "./Keyboard";
 
+import lives from "../assets/langList";
+import HealthDisplay from "./HealthDisplay";
+import alphabet from "../assets/alphabet";
+
 export default function Hangman() {
+  //----------------------Health--------------------------
+  const [health, setHealth] = useState(lives);
+
+  //----------------------Keys-----------------------------
+  const [keys, setKeys] = useState(alphabet);
+
   //------------------ Init Word ----------------------------
   const [word, setWord] = useState([]);
 
@@ -18,7 +28,7 @@ export default function Hangman() {
       const wordArr = capData.split("").map((letter) => {
         return {
           char: letter,
-          show: true,
+          show: false,
         };
       });
       setWord(wordArr);
@@ -26,10 +36,49 @@ export default function Hangman() {
     initWord();
   }, []);
 
+  function checkLetter(event) {
+    const guess = event.currentTarget.id;
+    let correct = word.some((item) => item.char === guess);
+    setWord((prevWord) => {
+      return prevWord.map((item) => {
+        return {
+          ...item,
+          show: guess === item.char ? true : item.show,
+        };
+      });
+    });
+    setKeys((prevKeys) => {
+      return {
+        ...prevKeys,
+        [guess]: { correct },
+      };
+    });
+    if (!correct) {
+      setHealth((prevHealth) => {
+        let nextHealth = prevHealth;
+        for (let i = 0; i < nextHealth.length; ++i) {
+          if (i === nextHealth.length - 1) {
+            console.log(lost);
+            break;
+          }
+          if (nextHealth[i].isDead === false) {
+            nextHealth[i].isDead = true;
+            break;
+          }
+        }
+        return nextHealth;
+      });
+    }
+  }
+
+  console.log(word);
+  console.log(health);
+
   return (
     <section className="hangman">
+      <HealthDisplay health={health} />
       <Word word={word} />
-      <Keyboard />
+      <Keyboard checkLetter={checkLetter} keys={keys} />
     </section>
   );
 }
